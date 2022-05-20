@@ -4,17 +4,17 @@ class BoardsController < ApplicationController
 
     def index
         boards = Board.all
-        render_success_response(boards)
+        render_success_response(boards.preload(:player_1, :player_2).map{|board| board.json})
     end
 
     def show
-        render_success_response(BoardDTO.new(@board))
+        render_success_response(@board.json)
     end
 
     def create
-        board = Board.new(created_by_id: @user.id, player_1_id: @user.id)
+        board = Board.new(created_by: @user, player_1: @user)
         if board.save
-            render_success_response(BoardDTO.new(board), "Board Created")
+            render_success_response(@board.json, "Board Created")
         else
             render_error_response({}, "Error creating Board " + board.errors.full_messages.join(", "))
         end
@@ -23,29 +23,29 @@ class BoardsController < ApplicationController
 
     def find_open_boards
         boards = Board.Waiting_Players
-        render_success_response(boards)
+        render_success_response(boards.preload(:player_1, :player_2).map{|board| board.json})
     end
 
     
     def find_user_boards
-        boards = Board.where(player_1_id: @user.id).or(Board.where(player_2_id: @user.id))
-        render_success_response(boards)
+        boards = Board.where(player_1: @user).or(Board.where(player_2: @user))
+        render_success_response(boards.preload(:player_1, :player_2).map{|board| board.json})
     end
 
     def join
-        if @board.player_1_id == @user.id || @board.player_2_id == @user.id
-            return render_success_response(BoardDTO.new(@board), "Joined to the board")
+        if @board.player_1 == @user || @board.player_2 == @user
+            return render_success_response(@board.json, "Joined to the board")
         end
 
-        if @board.player_1_id.present? && @board.player_2_id.present?
+        if @board.player_1.present? && @board.player_2.present?
             return render_error_response({}, "Board is full")
         end
 
-        @board.player_2_id = @user.id
+        @board.player_2 = @user
         @board.status = :Player_1_Turn
 
         if  @board.save
-            render_success_response(BoardDTO.new(@board), "Joined to the board")
+            render_success_response(@board.json, "Joined to the board")
         else
             render_error_response({}, "Error Joining Board " + board.errors.full_messages.join(", "))
         end
@@ -53,23 +53,23 @@ class BoardsController < ApplicationController
     end
 
     def move
+        if @board.Waiting_Players?
+            return render_error_response({}, "Waiting For Players to Join")
+        end
+
         if @board.Player_1_Win? || @board.Player_2_Win? || @board.Draw?
             return render_error_response({}, "Game Finished")
         end
 
-        if @board.player_1_id != @user.id && @board.player_2_id != @user.id
+        if @board.player_1 != @user && @board.player_2 != @user
             return render_error_response({}, "Player is not on the board")
         end
         
-        @is_player_1 = @board.player_1_id == @user.id
+        @is_player_1 = @board.player_1 == @user
 
-        if @board.Player_1_Turn? && !@is_player_1
+        if @board.Player_1_Turn? && !@is_player_1 || @board.Player_2_Turn? && @is_player_1
             return render_error_response({}, "Not your turn")
         end
-        if @board.Player_2_Turn? && @is_player_1
-            return render_error_response({}, "Not your turn")
-        end
-
 
         @board_moves = JSON.parse @board.board
         if @board_moves[params[:position]] != 0
@@ -81,16 +81,16 @@ class BoardsController < ApplicationController
         check_win
 
         if @board.save
-            render_success_response(BoardDTO.new(@board), "Move Done")
+            render_success_response(@board.json, "Move Done")
         else
-            render_error_response({}, "Error saving board")
+            render_error_response({}, "Error saving board " + board.errors.full_messages.join(", "))
         end
     end
 
     private
 
     def set_board
-        @board = Board.find_by(token: params[:board_token]) || Board.find_by(token: params[:id])
+        @board = Board.find_by(token: params[:board_token] ? params[:board_token] : params[:id])
         return if @board.present?
             return render_error_response({}, "Board doesn't exists", 404)
     end
