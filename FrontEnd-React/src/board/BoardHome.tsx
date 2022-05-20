@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ButtonPanel from "../components/ButtonPanel";
 import { showErrorMessage, showSuccessMessage } from "../components/SnackBar";
 import FormTextField from "../components/TextField";
-import Title, { Text } from "../components/Title";
+import { Title, Text } from "../components/Title";
 import { useSessionUser } from "../store/userStore";
 import {
   createGame,

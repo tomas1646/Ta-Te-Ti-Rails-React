@@ -2,7 +2,7 @@ interface Props {
   text: string;
 }
 
-export default function Title(props: Props) {
+export function Title(props: Props) {
   return <h2>{props.text}</h2>;
 }
 
