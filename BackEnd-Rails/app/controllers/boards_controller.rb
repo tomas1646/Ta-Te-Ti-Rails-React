@@ -1,6 +1,6 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: %i[show join move]
-  before_action :check_token, only: %i[create join find_user_boards move]
+  before_action :check_token, only: %i[create join find_user_boards find_user_open_boards move]
 
   def index
     boards = Board.all
@@ -30,12 +30,19 @@ class BoardsController < ApplicationController
     render_success_response(boards.preload(:player_1, :player_2).map { |board| board.json })
   end
 
+  def find_user_open_boards
+    boards = Board.where(status: [0,1,2]).and(Board.where(player_1: @user).or(Board.where(player_2: @user)))
+    render_success_response(boards.preload(:player_1, :player_2).map { |board| board.json })
+  end
+
   def join
     if @board.player_1 == @user || @board.player_2 == @user
       return render_success_response(@board.json, 'Joined to the board')
     end
 
-    return render_error_response({}, 'Board is full') if @board.player_1.present? && @board.player_2.present?
+    if @board.player_1.present? && @board.player_2.present?
+      return render_error_response({}, 'Board is full') 
+    end
 
     @board.player_2 = @user
     @board.status = :Player_1_Turn
@@ -48,9 +55,13 @@ class BoardsController < ApplicationController
   end
 
   def move
-    return render_error_response({}, 'Waiting For Players to Join') if @board.Waiting_Players?
+    if @board.Waiting_Players?
+      return render_error_response({}, 'Waiting For Players to Join')
+    end
 
-    return render_error_response({}, 'Game Finished') if @board.Player_1_Win? || @board.Player_2_Win? || @board.Draw?
+    if @board.Player_1_Win? || @board.Player_2_Win? || @board.Draw?
+      return render_error_response({}, 'Game Finished') 
+    end
 
     if @board.player_1 != @user && @board.player_2 != @user
       return render_error_response({}, 'Player is not on the board')
@@ -63,7 +74,9 @@ class BoardsController < ApplicationController
     end
 
     @board_moves = JSON.parse @board.board
-    return render_error_response({}, "Position isn't empty") if @board_moves[params[:position]] != 0
+    if @board_moves[params[:position]] != 0
+      return render_error_response({}, "Position isn't empty") 
+    end
 
     @board_moves[params[:position]] = @is_player_1 ? 'X' : 'O'
     @board.board = @board_moves.to_s
@@ -100,22 +113,32 @@ class BoardsController < ApplicationController
 
     # Horizontal
     for i in [0, 3, 6] do
-      win = true if !win && board[i] != 0 && board[i] == board[i + 1] && board[i + 1] == board[i + 2]
+      if !win && board[i] != 0 && board[i] == board[i + 1] && board[i + 1] == board[i + 2]
+        win = true 
+      end
     end
 
     # Verical
     for i in 0..2 do
-      win = true if !win && board[i] != 0 && board[i] == board[i + 3] && board[i + 3] == board[i + 6]
+      if !win && board[i] != 0 && board[i] == board[i + 3] && board[i + 3] == board[i + 6]
+        win = true 
+      end
     end
 
     # Crossed
     if !win && board[4] != 0
-      win = true if board[0] == board[4] && board[4] == board[8]
-      win = true if board[2] == board[4] && board[4] == board[6]
+      if board[0] == board[4] && board[4] == board[8]
+        win = true
+      end
+      if board[2] == board[4] && board[4] == board[6]
+        win = true 
+      end
     end
 
     # Draw
-    draw = true if !win && board.all? { |x| x != 0 }
+    if !win && board.all? { |x| x != 0 }
+      draw = true
+    end
 
     new_status = if draw
                    :Draw

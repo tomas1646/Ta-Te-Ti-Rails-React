@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     collection do
       get :find_open_boards
       get :find_user_boards
+      get :find_user_open_boards
     end
   end
 end
