@@ -63,9 +63,7 @@ export default function BoardHistory() {
       return player_1_name === user?.name ? "Won" : "Lost";
     }
 
-    if (status === "Draw") return "Draw";
-
-    return "he";
+    return "Draw";
   };
 
   return (
