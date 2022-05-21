@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     end
 
     def login
-        user = User.find_by(userName: params[:userName])
+        user = User.find_by(user_name: params[:user_name])
         
         if user.blank? || user.password != params[:password]
             render_error_response({}, "Incorrect Username or Password")
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     private
 
     def user_params
-        params.require(:user).permit(:name, :password, :userName)
+        params.require(:user).permit(:name, :password, :user_name)
     end
 
     def set_user

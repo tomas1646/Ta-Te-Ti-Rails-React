@@ -1,7 +1,6 @@
 class CreateBoards < ActiveRecord::Migration[7.0]
   def change
     create_table :boards do |t|
-      t.belongs_to :created_by, class_name: "User"
       t.belongs_to :player_1, class_name: "User"
       t.belongs_to :player_2, class_name: "User"
 

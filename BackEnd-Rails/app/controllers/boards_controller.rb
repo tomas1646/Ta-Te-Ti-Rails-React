@@ -1,6 +1,6 @@
 class BoardsController < ApplicationController
     before_action :set_board, only: [:show, :join, :move]
-    before_action :set_user, only: [:create, :join, :find_user_boards, :move]
+    before_action :check_token, only: [:create, :join, :find_user_boards, :move]
 
     def index
         boards = Board.all
@@ -12,9 +12,9 @@ class BoardsController < ApplicationController
     end
 
     def create
-        board = Board.new(created_by: @user, player_1: @user)
+        board = Board.new(player_1: @user)
         if board.save
-            render_success_response(@board.json, "Board Created")
+            render_success_response(board.json, "Board Created")
         else
             render_error_response({}, "Error creating Board " + board.errors.full_messages.join(", "))
         end
@@ -90,16 +90,16 @@ class BoardsController < ApplicationController
     private
 
     def set_board
-        @board = Board.find_by(token: params[:board_token] ? params[:board_token] : params[:id])
+        @board = Board.find_by(token: params[:id])
         return if @board.present?
             return render_error_response({}, "Board doesn't exists", 404)
     end
 
-    def set_user
-        @user = User.find_by(token: params[:user_token])
+    def check_token
+        @user = User.find_by(token: request.headers["Authorization"])
 
         return if @user.present?
-            return render_error_response({}, "User with token #{params[:user_token]} doesn't exists", 404)
+            return render_error_response({}, "User with token #{request.headers["Authorization"]} doesn't exists", 404)
     end
 
     def check_win

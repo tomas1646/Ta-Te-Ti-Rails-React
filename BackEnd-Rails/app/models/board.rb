@@ -1,10 +1,8 @@
 class Board < ApplicationRecord    
-    validates :created_by_id, presence: true
     validates :player_1_id, presence: true
 
-    belongs_to :created_by, class_name: "User"
     belongs_to :player_1, class_name: "User"
-    belongs_to :player_2, class_name: "User"
+    belongs_to :player_2, class_name: "User", optional: true
     
     before_create :set_token
 

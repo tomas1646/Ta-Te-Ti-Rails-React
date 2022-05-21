@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-    validates :name, :userName, :password, presence: true
-    validates :userName, uniqueness: true
+    validates :name, :user_name, :password, presence: true
+    validates :user_name, uniqueness: true
     
     before_create :set_token
 

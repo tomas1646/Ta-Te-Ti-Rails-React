@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema[7.0].define(version: 2022_05_11_193304) do
   create_table "boards", force: :cascade do |t|
-    t.integer "created_by_id"
     t.integer "player_1_id"
     t.integer "player_2_id"
     t.string "token"
@@ -20,14 +19,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_11_193304) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "index_boards_on_created_by_id"
     t.index ["player_1_id"], name: "index_boards_on_player_1_id"
     t.index ["player_2_id"], name: "index_boards_on_player_2_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.string "userName"
+    t.string "user_name"
     t.string "password"
     t.string "token"
     t.datetime "created_at", null: false
