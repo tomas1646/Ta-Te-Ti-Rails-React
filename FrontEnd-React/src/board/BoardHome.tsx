@@ -108,6 +108,7 @@ export default function BoardHome() {
             key={"1-" + board.token}
           >
             <Text text={"Board Id: " + board.token} />
+            <Text text={"Status: " + board.status} />
             <Button
               variant="outlined"
               style={{ height: "30px" }}
@@ -131,6 +132,7 @@ export default function BoardHome() {
             key={"2-" + board.token}
           >
             <Text text={"Board Id: " + board.token} />
+            <Text text={"Status: " + board.status} />
             <Button
               variant="outlined"
               style={{ height: "30px" }}

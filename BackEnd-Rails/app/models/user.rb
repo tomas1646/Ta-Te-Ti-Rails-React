@@ -1,12 +1,12 @@
 class User < ApplicationRecord
-    validates :name, :user_name, :password, presence: true
-    validates :user_name, uniqueness: true
-    
-    before_create :set_token
+  validates :name, :user_name, :password, presence: true
+  validates :user_name, uniqueness: true
 
-    private
+  before_create :set_token
 
-    def set_token
-        self.token = SecureRandom.uuid
-    end
+  private
+
+  def set_token
+    self.token = SecureRandom.uuid
+  end
 end
