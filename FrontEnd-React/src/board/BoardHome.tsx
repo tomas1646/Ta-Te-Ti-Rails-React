@@ -19,10 +19,15 @@ export default function BoardHome() {
   const user = useSessionUser();
 
   const [boardId, setBoardId] = useState<string>("");
-  const [openBoards, setOpenBoards] = useState<Board[]>();
-  const [userBoards, setUserBoards] = useState<Board[]>();
+  const [openBoards, setOpenBoards] = useState<Board[]>([]);
+  const [userBoards, setUserBoards] = useState<Board[]>([]);
 
   useEffect(() => {
+    if (!user) {
+      showErrorMessage("User isn't logged in");
+      return navigate("/login");
+    }
+
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -34,22 +39,15 @@ export default function BoardHome() {
         showErrorMessage(err.response.data.message || "Unexcpected Error")
       );
 
-    if (user) {
-      await getUserBoards(user.token)
-        .then((response) => setUserBoards(response.content))
-        .catch((err) =>
-          showErrorMessage(err.response.data.message || "Unexpected Error")
-        );
-    }
+    await getUserBoards()
+      .then((response) => setUserBoards(response.content))
+      .catch((err) =>
+        showErrorMessage(err.response.data.message || "Unexpected Error")
+      );
   }
 
   const handleNewGameButton = async () => {
-    if (!user) {
-      showErrorMessage("User isn't logged in");
-      return navigate("/login");
-    }
-
-    await createGame(user?.token)
+    await createGame()
       .then((response) => {
         showSuccessMessage(response.message);
         navigate("/board/" + response.content.token);
@@ -60,12 +58,7 @@ export default function BoardHome() {
   };
 
   const handleJoinButton = async () => {
-    if (!user) {
-      showErrorMessage("User isn't logged in");
-      return navigate("/login");
-    }
-
-    await joinGame(boardId, user?.token)
+    await joinGame(boardId)
       .then((response) => {
         showSuccessMessage(response.message);
         navigate("/board/" + response.content.token);

@@ -4,14 +4,14 @@ import { showErrorMessage } from "../components/SnackBar";
 
 interface Props {
   position: number;
-  value?: String;
+  value?: string;
   makeMove: (position: number) => void;
-  player?: String;
+  player?: string;
   canMove: boolean;
 }
 
 export default function Square(props: Props) {
-  const [value, setValue] = useState<String>();
+  const [value, setValue] = useState<string>();
 
   useEffect(() => {
     if (props.value !== "0") {

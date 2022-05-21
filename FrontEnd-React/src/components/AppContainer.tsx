@@ -15,7 +15,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 import { SideBarMenu } from "../utils/utils";
 import { cleanupSessionUser, useSessionUser } from "../store/userStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 
 interface Props {

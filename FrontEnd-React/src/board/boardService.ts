@@ -12,11 +12,9 @@ export interface Board {
   board: string[];
 }
 
-export async function createGame(
-  user_token: string
-): Promise<ApiResponse<Board>> {
+export async function createGame(): Promise<ApiResponse<Board>> {
   const response: ApiResponse<Board> = (
-    await axios.post(boardUrl, { user_token })
+    await axios.post(boardUrl, {})
   ).data;
 
   return response;
@@ -24,10 +22,9 @@ export async function createGame(
 
 export async function joinGame(
   boardToken: string,
-  user_token: string
 ): Promise<ApiResponse<Board>> {
   const response: ApiResponse<Board> = (
-    await axios.post(boardUrl + "/" + boardToken + "/join", { user_token })
+    await axios.post(boardUrl + `/${boardToken}/join`, {})
   ).data;
 
   return response;
@@ -41,11 +38,9 @@ export async function getOpenBoards(): Promise<ApiResponse<Board[]>> {
   return response;
 }
 
-export async function getUserBoards(
-  userToken: string
-): Promise<ApiResponse<Board[]>> {
+export async function getUserBoards(): Promise<ApiResponse<Board[]>> {
   const response: ApiResponse<Board[]> = (
-    await axios.get(boardUrl + "/find_user_boards/" + userToken)
+    await axios.get(boardUrl + "/find_user_boards")
   ).data;
 
   return response;
@@ -63,14 +58,10 @@ export async function getBoard(
 
 export async function moveBoard(
   boardToken: string,
-  user_token: string,
   position: number
 ): Promise<ApiResponse<Board>> {
   const response: ApiResponse<Board> = (
-    await axios.post(boardUrl + "/" + boardToken + "/move", {
-      user_token,
-      position,
-    })
+    await axios.post(boardUrl + `/${boardToken}/move`, { position })
   ).data;
 
   return response;

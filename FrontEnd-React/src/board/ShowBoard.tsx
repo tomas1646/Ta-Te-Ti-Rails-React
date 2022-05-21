@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Grid, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,13 +15,9 @@ export default function ShowBoard() {
   const boardToken = params.board_id;
   const user = useSessionUser();
   const navigate = useNavigate();
+  const boardState = useRef("");
 
-  // Having the board attributes this way improves rendering
-  const [player1Name, setplayer1Name] = useState<String>("");
-  const [player2Name, setplayer2Name] = useState<String>("");
-  const [board, setBoard] = useState<String[]>([]);
-  const [status, setStatus] = useState<String>("");
-
+  const [board, setBoard] = useState<Board>();
   const [player, setPlayer] = useState<"X" | "O" | undefined>();
   const [canMove, setCanMove] = useState<boolean>(false);
   const [gameFinished, setGameFinished] = useState<boolean>(false);
@@ -53,10 +49,12 @@ export default function ShowBoard() {
       .then((response) => {
         const board: Board = response.content;
 
-        setplayer1Name(board.player_1_name);
-        setplayer2Name(board.player_2_name);
-        setStatus(board.status);
-        setBoard(board.board);
+        // Only re-render when board status changes
+        if (boardState.current === board.status) {
+          return;
+        }
+        boardState.current = board.status;
+        setBoard(board);
 
         if (
           board.status === "Player_1_Win" ||
@@ -106,7 +104,7 @@ export default function ShowBoard() {
     }
 
     setCanMove(false);
-    await moveBoard(boardToken, user?.token, position)
+    await moveBoard(boardToken, position)
       .then((response) => {
         showSuccessMessage(response.message);
         setCanMove(false);
@@ -121,13 +119,13 @@ export default function ShowBoard() {
     <>
       <StatsPanel
         boardToken={boardToken}
-        status={status}
-        player1Name={player1Name}
-        player2Name={player2Name}
+        status={board?.status}
+        player1Name={board?.player_1_name}
+        player2Name={board?.player_2_name}
       />
 
       <BoardPanel
-        board={board}
+        board={board?.board}
         makeMove={makeMove}
         player={player}
         canMove={canMove}
@@ -138,15 +136,15 @@ export default function ShowBoard() {
 }
 
 interface StatsPanelProps {
-  boardToken?: String;
-  status?: String;
-  player1Name?: String;
-  player2Name?: String;
+  boardToken?: string;
+  status?: string;
+  player1Name?: string;
+  player2Name?: string;
 }
 
-//React Memo to avoid re render when props are the same
-const StatsPanel = React.memo(
-  ({ boardToken, status, player1Name, player2Name }: StatsPanelProps) => (
+function StatsPanel(props: StatsPanelProps) {
+  const { boardToken, status, player1Name, player2Name } = props;
+  return (
     <>
       <Paper style={{ padding: "10px" }} elevation={12}>
         <Title text="Board" />
@@ -164,20 +162,19 @@ const StatsPanel = React.memo(
         </Grid>
       </Paper>
     </>
-  )
-);
-
+  );
+}
 interface BoardPanelProps {
-  board?: String[];
+  board?: string[];
   makeMove: (position: number) => void;
-  player?: String;
+  player?: string;
   canMove: boolean;
   handleButton: (e?: any) => void;
 }
 
-//React Memo to avoid re render when props are the same
-const BoardPanel = React.memo(
-  ({ board, makeMove, player, canMove, handleButton }: BoardPanelProps) => (
+function BoardPanel(props: BoardPanelProps) {
+  const { board, makeMove, player, canMove, handleButton } = props;
+  return (
     <>
       <Paper style={{ padding: "10px", marginTop: "10px" }} elevation={12}>
         <div
@@ -282,13 +279,5 @@ const BoardPanel = React.memo(
         <ButtonPanel button={[{ text: "Go Back", onClick: handleButton }]} />
       </Paper>
     </>
-  ),
-  areEqual
-);
-
-function areEqual(
-  prevPros: BoardPanelProps,
-  newProps: BoardPanelProps
-): boolean {
-  return JSON.stringify(prevPros) === JSON.stringify(newProps);
+  );
 }

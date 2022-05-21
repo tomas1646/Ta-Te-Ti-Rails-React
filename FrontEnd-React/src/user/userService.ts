@@ -4,8 +4,6 @@ import { updateSessionUser } from "../store/userStore";
 import { ApiResponse } from "../utils/utils";
 
 const userUrl = backEndUrl + "/users";
-axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-axios.defaults.headers.common["Content-Type"] = "application/json";
 
 export interface User {
   token: string;
@@ -14,11 +12,11 @@ export interface User {
 }
 
 export async function login(
-  userName: string,
+  user_name: string,
   password: string
 ): Promise<ApiResponse<User>> {
   const response: ApiResponse<User> = (
-    await axios.post(userUrl + "/login", { userName, password })
+    await axios.post(userUrl + "/login", { user_name, password })
   ).data;
 
   updateSessionUser(response.content);
@@ -26,12 +24,12 @@ export async function login(
 }
 
 export async function register(
-  userName: string,
+  user_name: string,
   password: string,
   name: string
 ): Promise<ApiResponse<User>> {
   const response: ApiResponse<User> = (
-    await axios.post(userUrl + "/register", { name, userName, password })
+    await axios.post(userUrl + "/register", { name, user_name, password })
   ).data;
 
   return response;
