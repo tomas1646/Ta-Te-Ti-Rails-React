@@ -50,7 +50,7 @@ class BoardsController < ApplicationController
     if @board.save
       render_success_response(@board.json, 'Joined to the board')
     else
-      render_error_response({}, 'Error Joining Board ' + board.errors.full_messages.join(', '))
+      render_error_response({}, "Error Joining Board #{board.errors.full_messages.join(', ')}")
     end
   end
 

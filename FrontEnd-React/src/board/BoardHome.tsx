@@ -95,7 +95,7 @@ export default function BoardHome() {
         ]}
       />
       <Divider style={{ marginTop: "30px", marginBottom: "30px" }} />
-      <Title text="Your Games Opened" />
+      <Title text="Your Games In Course" />
 
       {userOpenBoards &&
         userOpenBoards.map((board) => (
