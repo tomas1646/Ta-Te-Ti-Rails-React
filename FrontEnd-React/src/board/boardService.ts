@@ -46,6 +46,14 @@ export async function getUserBoards(): Promise<ApiResponse<Board[]>> {
   return response;
 }
 
+export async function getUserOpenBoards(): Promise<ApiResponse<Board[]>> {
+  const response: ApiResponse<Board[]> = (
+    await axios.get(boardUrl + "/find_user_open_boards")
+  ).data;
+
+  return response;
+}
+
 export async function getBoard(
   boardToken: string
 ): Promise<ApiResponse<Board>> {

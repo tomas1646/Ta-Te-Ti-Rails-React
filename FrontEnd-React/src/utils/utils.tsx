@@ -2,6 +2,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AppsOutageIcon from "@mui/icons-material/AppsOutage";
 import LoginIcon from "@mui/icons-material/Login";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 
 export interface ApiResponse<T> {
   status: number;
@@ -25,6 +26,12 @@ export const getOptions = (): SideBarMenu[] => {
       path: "board",
       name: "Ta Te Ti",
       icon: <AppsOutageIcon />,
+      loggedUserOnly: true,
+    },
+    {
+      path: "history",
+      name: "History",
+      icon: <HistoryToggleOffIcon />,
       loggedUserOnly: true,
     },
     {

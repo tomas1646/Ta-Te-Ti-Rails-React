@@ -7,6 +7,7 @@ import Login from "./user/Login";
 import Register from "./user/Register";
 
 import { getOptions } from "./utils/utils";
+import BoardHistory from "./board/BoardHistory";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/test" element={<h1>Test</h1>} />
           <Route path="/board/:board_id" element={<ShowBoard />} />
           <Route path="/board" element={<BoardHome />} />
+          <Route path="/history" element={<BoardHistory />} />
           <Route path="/register-user" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<h1>Welcome To Ta Te Ti</h1>} />

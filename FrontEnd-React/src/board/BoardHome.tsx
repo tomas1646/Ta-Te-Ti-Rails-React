@@ -11,7 +11,7 @@ import {
   joinGame,
   Board,
   getOpenBoards,
-  getUserBoards,
+  getUserOpenBoards,
 } from "./boardService";
 
 export default function BoardHome() {
@@ -20,7 +20,7 @@ export default function BoardHome() {
 
   const [boardId, setBoardId] = useState<string>("");
   const [openBoards, setOpenBoards] = useState<Board[]>([]);
-  const [userBoards, setUserBoards] = useState<Board[]>([]);
+  const [userOpenBoards, setUserOpenBoards] = useState<Board[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -39,8 +39,8 @@ export default function BoardHome() {
         showErrorMessage(err.response.data.message || "Unexcpected Error")
       );
 
-    await getUserBoards()
-      .then((response) => setUserBoards(response.content))
+    await getUserOpenBoards()
+      .then((response) => setUserOpenBoards(response.content))
       .catch((err) =>
         showErrorMessage(err.response.data.message || "Unexpected Error")
       );
@@ -95,10 +95,10 @@ export default function BoardHome() {
         ]}
       />
       <Divider style={{ marginTop: "30px", marginBottom: "30px" }} />
-      <Title text="Your games" />
+      <Title text="Your Games Opened" />
 
-      {userBoards &&
-        userBoards.map((board) => (
+      {userOpenBoards &&
+        userOpenBoards.map((board) => (
           <div
             style={{
               display: "flex",
@@ -132,7 +132,6 @@ export default function BoardHome() {
             key={"2-" + board.token}
           >
             <Text text={"Board Id: " + board.token} />
-            <Text text={"Status: " + board.status} />
             <Button
               variant="outlined"
               style={{ height: "30px" }}

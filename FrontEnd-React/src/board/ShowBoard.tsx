@@ -89,13 +89,13 @@ export default function ShowBoard() {
   };
 
   const handleButton = () => {
-    navigate("/board");
+    navigate(-1);
   };
 
   const makeMove = async (position: number) => {
     if (!boardToken) {
       showErrorMessage("Board wasn't loaded correctly. Try Again.");
-      return navigate("/boards");
+      return navigate(-1);
     }
 
     if (!user) {
