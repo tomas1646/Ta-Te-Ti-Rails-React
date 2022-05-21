@@ -50,7 +50,11 @@ export default function BoardHistory() {
       );
   };
 
-  const getStatus = (status: string, player_1_name: string): string => {
+  const getStatus = (
+    status: string,
+    player_1_name: string,
+    player_2_name: string
+  ): string => {
     if (
       status === "Waiting_Players" ||
       status === "Player_1_Turn" ||
@@ -59,8 +63,12 @@ export default function BoardHistory() {
       return "In Course";
     }
 
-    if (status === "Player_1_Win" || status === "Player_2_Win") {
+    if (status === "Player_1_Win") {
       return player_1_name === user?.name ? "Won" : "Lost";
+    }
+
+    if (status === "Player_2_Win") {
+      return player_2_name === user?.name ? "Won" : "Lost";
     }
 
     return "Draw";
@@ -99,7 +107,11 @@ export default function BoardHistory() {
                 >
                   <TableCell align="left">{board.token}</TableCell>
                   <TableCell align="center">
-                    {getStatus(board.status, board.player_1_name)}
+                    {getStatus(
+                      board.status,
+                      board.player_1_name,
+                      board.player_2_name
+                    )}
                   </TableCell>
                   <TableCell align="center">{board.player_1_name}</TableCell>
                   <TableCell align="center">{board.player_2_name}</TableCell>
