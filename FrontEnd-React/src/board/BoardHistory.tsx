@@ -60,7 +60,7 @@ export default function BoardHistory() {
     }
 
     if (status === "Player_1_Win" || status === "Player_2_Win") {
-      return player_1_name === user?.name ? "Winned" : "Lost";
+      return player_1_name === user?.name ? "Won" : "Lost";
     }
 
     if (status === "Draw") return "Draw";
