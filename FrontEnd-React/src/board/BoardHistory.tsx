@@ -79,7 +79,7 @@ export default function BoardHistory() {
       <Title text="History" />
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
-          <TableHead style={{ backgroundColor: "lightgray" }}>
+          <TableHead>
             <TableRow>
               <TableCell align="left" style={{ fontWeight: "bold" }}>
                 Board Token
@@ -120,7 +120,7 @@ export default function BoardHistory() {
                       style={{ maxWidth: "100%" }}
                       onClick={() => handleEnterBoardButton(board.token)}
                     >
-                      See Board
+                      Open Board
                     </Button>
                   </TableCell>
                 </TableRow>

@@ -15,7 +15,7 @@ export function showErrorMessage(message: string) {
 
 export function showSuccessMessage(message: string) {
   const customEvent = new CustomEvent("showSnackbar", {
-    detail: { severity: "error", message },
+    detail: { severity: "success", message },
   });
   document.dispatchEvent(customEvent);
 }
