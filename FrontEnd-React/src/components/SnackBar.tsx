@@ -1,59 +1,57 @@
-import { Alert, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Alert, Snackbar } from "@mui/material";
 
-interface SnackBarData {
-  severity: "error" | "warning" | "info" | "success";
+interface SnackBarProps {
+  severity: "success" | "error" | "warning" | "info";
   message: string;
 }
 
 export function showErrorMessage(message: string) {
-  const snackData = { severity: "error", message };
-  const customEvent = new CustomEvent("snackMessage", {
-    detail: { snackData },
+  const customEvent = new CustomEvent("showSnackbar", {
+    detail: { severity: "error", message },
   });
   document.dispatchEvent(customEvent);
 }
 
 export function showSuccessMessage(message: string) {
-  const snackData = { severity: "success", message };
-  const customEvent = new CustomEvent("snackMessage", {
-    detail: { snackData },
-  });
-  document.dispatchEvent(customEvent);
-}
-
-export function sendSnackMessage(data: SnackBarData) {
-  const snackData = data;
-  const customEvent = new CustomEvent("snackMessage", {
-    detail: { snackData },
+  const customEvent = new CustomEvent("showSnackbar", {
+    detail: { severity: "error", message },
   });
   document.dispatchEvent(customEvent);
 }
 
 export default function SnackbarComponent() {
-  const [snackData, setSnackData] = useState<SnackBarData | null>(null);
+  const [snackbarProps, setSnackbarProps] = useState<SnackBarProps | null>(
+    null
+  );
 
   useEffect(() => {
-    document.addEventListener("snackMessage", updateSnackData);
+    document.addEventListener("showSnackbar", updateSnackbar);
+
+    //Component unmount
     return () => {
-      document.removeEventListener("snackMessage", updateSnackData);
+      document.removeEventListener("showSnackbar", updateSnackbar);
     };
   }, []);
 
-  const updateSnackData = (event: any) => {
-    setSnackData(event.detail.snackData);
+  const updateSnackbar = (e: any) => {
+    setSnackbarProps(e.detail);
   };
 
   return (
-    snackData && (
+    snackbarProps && (
       <Snackbar
-        open={!!snackData}
-        autoHideDuration={6000}
-        onClose={() => setSnackData(null)}
+        open={!!snackbarProps}
+        autoHideDuration={5000}
+        onClose={() => setSnackbarProps(null)}
         anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
       >
-        <Alert elevation={6} variant="filled" severity={snackData.severity}>
-          {snackData.message}
+        <Alert
+          elevation={10}
+          variant="filled"
+          severity={snackbarProps.severity}
+        >
+          {snackbarProps.message}
         </Alert>
       </Snackbar>
     )
