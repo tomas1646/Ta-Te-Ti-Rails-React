@@ -32,22 +32,22 @@ export default function BoardHome() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function fetchData() {
-    await getOpenBoards()
+  function fetchData() {
+    getOpenBoards()
       .then((response) => setOpenBoards(response.content))
       .catch((err) =>
         showErrorMessage(err.response.data.message || "Unexcpected Error")
       );
 
-    await getUserOpenBoards()
+    getUserOpenBoards()
       .then((response) => setUserOpenBoards(response.content))
       .catch((err) =>
         showErrorMessage(err.response.data.message || "Unexpected Error")
       );
   }
 
-  const handleNewGameButton = async () => {
-    await createGame()
+  const handleNewGameButton = () => {
+    createGame()
       .then((response) => {
         showSuccessMessage(response.message);
         navigate("/board/" + response.content.token);
@@ -57,8 +57,8 @@ export default function BoardHome() {
       );
   };
 
-  const handleJoinButton = async () => {
-    await joinGame(boardId)
+  const handleJoinButton = () => {
+    joinGame(boardId)
       .then((response) => {
         showSuccessMessage(response.message);
         navigate("/board/" + response.content.token);

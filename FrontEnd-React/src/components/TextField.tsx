@@ -5,7 +5,7 @@ interface Props {
   label: string;
   name: string;
   title?: string;
-  value: string | undefined;
+  value: string;
   setValue: (e: any) => void;
   password?: boolean;
 }
@@ -19,7 +19,7 @@ function FormTextField(props: Props) {
         name={props.name}
         label={props.label}
         autoComplete="off"
-        value={props.value || ""}
+        value={props.value}
         fullWidth
         onChange={(e) => props.setValue(e.target.value)}
         type={props.password ? "password" : "text"}

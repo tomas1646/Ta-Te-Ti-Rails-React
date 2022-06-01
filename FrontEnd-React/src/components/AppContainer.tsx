@@ -24,7 +24,7 @@ interface Props {
 }
 
 export default function AppContainer(props: Props) {
-  const drawerWidth = 180;
+  const drawerWidth = 200;
   const navigation = useNavigate();
   const user = useSessionUser();
 
@@ -61,7 +61,7 @@ export default function AppContainer(props: Props) {
         <Divider />
         <List>
           {props.navigation &&
-            props.navigation.map((item, index) => {
+            props.navigation.map((item) => {
               if (
                 item.showAlways ||
                 (user && item.loggedUserOnly) ||

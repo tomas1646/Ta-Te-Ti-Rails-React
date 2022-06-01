@@ -26,21 +26,19 @@ export default function BoardHistory() {
       return navigate("/login");
     }
 
-    async function fetchData() {
-      await getUserBoards()
-        .then((response) => {
-          setBoards(response.content);
-        })
-        .catch((err) =>
-          showErrorMessage(err.response.data.message || "Unexcpected Error")
-        );
-    }
-    fetchData();
+    getUserBoards()
+      .then((response) => {
+        setBoards(response.content);
+      })
+      .catch((err) =>
+        showErrorMessage(err.response.data.message || "Unexcpected Error")
+      );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleEnterBoardButton = async (boardId: string) => {
-    await joinGame(boardId)
+  const handleEnterBoardButton = (boardId: string) => {
+    joinGame(boardId)
       .then((response) => {
         showSuccessMessage(response.message);
         navigate("/board/" + response.content.token);
@@ -50,11 +48,7 @@ export default function BoardHistory() {
       );
   };
 
-  const getStatus = (
-    status: string,
-    player_1_name: string,
-    player_2_name: string
-  ): string => {
+  const getStatus = (status: string, player_1_name: string): string => {
     if (
       status === "Waiting_Players" ||
       status === "Player_1_Turn" ||
@@ -68,7 +62,7 @@ export default function BoardHistory() {
     }
 
     if (status === "Player_2_Win") {
-      return player_2_name === user?.name ? "Won" : "Lost";
+      return player_1_name === user?.name ? "Lost" : "Win";
     }
 
     return "Draw";
@@ -91,7 +85,7 @@ export default function BoardHistory() {
                 Player 1
               </TableCell>
               <TableCell align="center" style={{ fontWeight: "bold" }}>
-                Player 1
+                Player 2
               </TableCell>
               <TableCell align="center" style={{ fontWeight: "bold" }}>
                 Actions
@@ -107,11 +101,7 @@ export default function BoardHistory() {
                 >
                   <TableCell align="left">{board.token}</TableCell>
                   <TableCell align="center">
-                    {getStatus(
-                      board.status,
-                      board.player_1_name,
-                      board.player_2_name
-                    )}
+                    {getStatus(board.status, board.player_1_name)}
                   </TableCell>
                   <TableCell align="center">{board.player_1_name}</TableCell>
                   <TableCell align="center">{board.player_2_name}</TableCell>

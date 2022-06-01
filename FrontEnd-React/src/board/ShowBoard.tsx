@@ -36,7 +36,7 @@ export default function ShowBoard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchBoard = async () => {
+  const fetchBoard = () => {
     if (!boardToken) {
       showErrorMessage("Board wasn't loaded correctly. Try Again.");
       return navigate("/boards");
@@ -45,7 +45,7 @@ export default function ShowBoard() {
     let canmove = false;
     let isPlayer1 = false;
 
-    await getBoard(boardToken)
+    getBoard(boardToken)
       .then((response) => {
         const board: Board = response.content;
 
@@ -53,6 +53,7 @@ export default function ShowBoard() {
         if (boardState.current === board.status) {
           return;
         }
+
         boardState.current = board.status;
         setBoard(board);
 
@@ -92,7 +93,7 @@ export default function ShowBoard() {
     navigate(-1);
   };
 
-  const makeMove = async (position: number) => {
+  const makeMove = (position: number) => {
     if (!boardToken) {
       showErrorMessage("Board wasn't loaded correctly. Try Again.");
       return navigate(-1);
@@ -104,15 +105,16 @@ export default function ShowBoard() {
     }
 
     setCanMove(false);
-    await moveBoard(boardToken, position)
+
+    moveBoard(boardToken, position)
       .then((response) => {
         showSuccessMessage(response.message);
-        setCanMove(false);
         fetchBoard();
       })
-      .catch((err) =>
-        showErrorMessage(err.response.data.message || "Unexcpected Error")
-      );
+      .catch((err) => {
+        setCanMove(true);
+        showErrorMessage(err.response.data.message || "Unexcpected Error");
+      });
   };
 
   return (

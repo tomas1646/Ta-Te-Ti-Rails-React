@@ -8,9 +8,9 @@ import { register } from "./userService";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [name, setName] = useState<string>();
-  const [userName, setUserName] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [name, setName] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,9 +30,9 @@ export default function Register() {
   };
 
   const resetFields = () => {
-    setName(undefined);
-    setPassword(undefined);
-    setUserName(undefined);
+    setName("");
+    setPassword("");
+    setUserName("");
   };
 
   return (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import backEndUrl from "../environment";
+import { backEndUrl } from "../environment";
 import { updateSessionUser } from "../store/userStore";
 import { ApiResponse } from "../utils/utils";
 

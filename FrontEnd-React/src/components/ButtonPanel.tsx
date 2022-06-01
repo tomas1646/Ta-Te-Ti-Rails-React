@@ -18,6 +18,7 @@ export default function ButtonPanel(props: Props) {
         display: "flex",
         marginTop: "10px",
         justifyContent: "flex-end",
+        gap: "10px",
       }}
     >
       {props.button.map((button, index) => (
@@ -25,9 +26,6 @@ export default function ButtonPanel(props: Props) {
           key={button.text + index}
           type={button.submit ? "submit" : "button"}
           variant="outlined"
-          style={
-            index !== props.button.length - 1 ? { marginRight: "7px" } : {}
-          }
           onClick={button.onClick}
         >
           {button.text}

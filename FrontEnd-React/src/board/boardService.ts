@@ -1,5 +1,5 @@
 import axios from "axios";
-import backEndUrl from "../environment";
+import { backEndUrl } from "../environment";
 import { ApiResponse } from "../utils/utils";
 
 const boardUrl = backEndUrl + "/boards";
@@ -13,15 +13,13 @@ export interface Board {
 }
 
 export async function createGame(): Promise<ApiResponse<Board>> {
-  const response: ApiResponse<Board> = (
-    await axios.post(boardUrl, {})
-  ).data;
+  const response: ApiResponse<Board> = (await axios.post(boardUrl, {})).data;
 
   return response;
 }
 
 export async function joinGame(
-  boardToken: string,
+  boardToken: string
 ): Promise<ApiResponse<Board>> {
   const response: ApiResponse<Board> = (
     await axios.post(boardUrl + `/${boardToken}/join`, {})
