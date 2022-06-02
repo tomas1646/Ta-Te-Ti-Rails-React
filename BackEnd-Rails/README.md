@@ -4,22 +4,22 @@
 
 ### User
 
-| Metodo | Ruta            | Accion            |
-| ------ | --------------- | ----------------- |
-| POST   | /users/register | Registrar Usuario |
-| POST   | /users/login    | Login             |
+| Metodo | Ruta            | Accion                                   |
+| ------ | --------------- | ---------------------------------------- |
+| POST   | /users/register | [Registrar Usuario](#post-usersregister) |
+| POST   | /users/login    | [Login](#post-userslogin)                |
 
 ### Board
 
-| Metodo | Ruta                          | Accion                                                                    |
-| ------ | ----------------------------- | ------------------------------------------------------------------------- |
-| GET    | /boards/:id                   | Obtener un tablero                                                        |
-| GET    | /boards/find_open_boards      | Obtener los tableros a los que se pueden unir los jugadores               |
-| GET    | /boards/find_user_boards      | Obtener todos los tableros en los que participo el usuario                |
-| GET    | /boards/find_user_open_boards | Obtener todos los tableros en los que esta el usuario, y no han terminado |
-| POST   | /boards                       | Crear un tablero                                                          |
-| POST   | /boards/:id/join              | Unirse a un tablero                                                       |
-| POST   | /boards/:id/move              | Hacer un movimiento en un tablero                                         |
+| Metodo | Ruta                          | Accion                                                                                                     |
+| ------ | ----------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| GET    | /boards/:id                   | [Obtener un tablero](#get-boardsid)                                                                        |
+| GET    | /boards/find_open_boards      | [Obtener los tableros a los que se pueden unir los jugadores](#get-boardsfindopenboards)                   |
+| GET    | /boards/find_user_boards      | [Obtener todos los tableros en los que participo el usuario](#get-boardsfinduserboards)                    |
+| GET    | /boards/find_user_open_boards | [Obtener todos los tableros en los que esta el usuario, y no han terminado](#get-boardsfinduseropenboards) |
+| POST   | /boards                       | [Crear un tablero](#post-boards)                                                                           |
+| POST   | /boards/:id/join              | [Unirse a un tablero](#post-boardsidjoin)                                                                  |
+| POST   | /boards/:id/move              | [Hacer un movimiento en un tablero](#post-boardsidmove)                                                    |
 
 ---
 
@@ -27,11 +27,25 @@
 
 ### User Endpoints
 
+---
+
 #### POST /users/register
 
 Registrar Usuario
 
-Respuesta Correcta:
+REQUEST
+
+```json
+{
+  "name": "Tomas E",
+  "user_name": "tomas1646",
+  "password": "password"
+}
+```
+
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -45,7 +59,7 @@ Respuesta Correcta:
 }
 ```
 
-Respuesta Error:
+Error:
 
 ```json
 {
@@ -55,11 +69,24 @@ Respuesta Error:
 }
 ```
 
+---
+
 #### POST /users/login
 
 Login
 
-Respuesta Correcta:
+REQUEST
+
+```json
+{
+  "user_name": "tomas1646",
+  "password": "password"
+}
+```
+
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -73,7 +100,7 @@ Respuesta Correcta:
 }
 ```
 
-Respuesta Error:
+Error:
 
 ```json
 {
@@ -85,11 +112,15 @@ Respuesta Error:
 
 ### Board Endpoints
 
+---
+
 #### GET /boards/:id
 
 Obtener un tablero
 
-Respuesta Correcta:
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -105,21 +136,25 @@ Respuesta Correcta:
 }
 ```
 
-Respuesta Error:
+Error:
 
 ```json
 {
-  "status": 400,
-  "message": "Incorrect Username or Password",
+  "status": 404,
+  "message": "Board doesn't exists",
   "content": {}
 }
 ```
+
+---
 
 #### GET /boards/find_open_boards
 
 Obtener los tableros a los que se pueden unir los jugadores
 
-Respuesta Correcta:
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -143,12 +178,22 @@ Respuesta Correcta:
   ]
 }
 ```
+
+---
 
 #### GET /boards/find_user_boards
 
 Obtener todos los tableros en los que participo el usuario
 
-Respuesta Correcta:
+REQUEST
+
+```text
+Request.Authorization = User Token
+```
+
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -172,12 +217,32 @@ Respuesta Correcta:
   ]
 }
 ```
+
+Error:
+
+```json
+{
+  "status": 404,
+  "message": "User with token doesn't exists",
+  "content": {}
+}
+```
+
+---
 
 #### GET /boards/find_user_open_boards
 
 Obtener todos los tableros en los que esta el usuario, y no han terminado
 
-Respuesta Correcta:
+REQUEST
+
+```text
+Request.Authorization = User Token
+```
+
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -194,7 +259,7 @@ Respuesta Correcta:
     {
       "player_1_name": "Tomas E",
       "player_2_name": "Jane Doe",
-      "status": "Waiting_For_Players",
+      "status": "Player_1_Win",
       "token": "b5283e68-d468-410c-8a1c-b52f8cbda245",
       "board": ["X", 0, "O", "X", 0, "O", "X", 0, 0]
     }
@@ -202,11 +267,31 @@ Respuesta Correcta:
 }
 ```
 
+Error:
+
+```json
+{
+  "status": 404,
+  "message": "User with token doesn't exists",
+  "content": {}
+}
+```
+
+---
+
 #### POST /boards
 
 Crear un tablero
 
-Respuesta Correcta:
+REQUEST
+
+```text
+Request.Authorization = User Token
+```
+
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -222,7 +307,21 @@ Respuesta Correcta:
 }
 ```
 
-Respuesta Error:
+Error 1:
+
+No existe el usuario
+
+```json
+{
+  "status": 404,
+  "message": "User with token doesn't exists",
+  "content": {}
+}
+```
+
+Error 2:
+
+Error al guardar el tablero
 
 ```json
 {
@@ -232,11 +331,21 @@ Respuesta Error:
 }
 ```
 
+---
+
 #### POST /boards/:id/join
 
 Unirse a un tablero
 
-Respuesta Correcta:
+REQUEST
+
+```text
+Request.Authorization = User Token
+```
+
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -252,7 +361,19 @@ Respuesta Correcta:
 }
 ```
 
-Posibles Errores y sus respuestas:
+Error 1:
+
+Cuando el tablero no existe
+
+```json
+{
+  "status": 404,
+  "message": "Board doesn't exists",
+  "content": {}
+}
+```
+
+Error 2:
 
 Cuando hay un error al guardar el tablero:
 
@@ -264,6 +385,8 @@ Cuando hay un error al guardar el tablero:
 }
 ```
 
+Error 3:
+
 Cuando el tablero esta lleno:
 
 ```json
@@ -274,13 +397,35 @@ Cuando el tablero esta lleno:
 }
 ```
 
+Error 3:
+
+No existe el usuario
+
+```json
+{
+  "status": 404,
+  "message": "User with token doesn't exists",
+  "content": {}
+}
+```
+
+---
+
 #### POST /boards/:id/move
 
 Hacer un movimiento en un tablero
 
 Unirse a un tablero
 
-Respuesta Correcta:
+REQUEST
+
+```text
+Request.Authorization = User Token
+```
+
+RESPONSE
+
+Success:
 
 ```json
 {
@@ -296,9 +441,21 @@ Respuesta Correcta:
 }
 ```
 
-Posibles Errores y sus respuestas:
+Error 1:
 
-Cuando no se unen los dos jugadores al tablero:
+Cuadno el tablero no existe
+
+```json
+{
+  "status": 404,
+  "message": "Board doesn't exists",
+  "content": {}
+}
+```
+
+Error 2:
+
+Cuando no se unen los dos jugadores al tablero
 
 ```json
 {
@@ -308,7 +465,9 @@ Cuando no se unen los dos jugadores al tablero:
 }
 ```
 
-Cuando el juego ya termino:
+Error 3:
+
+Cuando el juego ya termino
 
 ```json
 {
@@ -318,7 +477,9 @@ Cuando el juego ya termino:
 }
 ```
 
-Cuando un usuario que no esta en el tablero, intenta hacer un movimiento en ese tablero:
+Error 4:
+
+Cuando un usuario que no esta en el tablero, intenta hacer un movimiento en ese tablero
 
 ```json
 {
@@ -327,6 +488,8 @@ Cuando un usuario que no esta en el tablero, intenta hacer un movimiento en ese 
   "content": {}
 }
 ```
+
+Error 5:
 
 Cuando no es el turno del jugador:
 
@@ -338,6 +501,8 @@ Cuando no es el turno del jugador:
 }
 ```
 
+Error 6:
+
 Cuando la posicion del tablero esta ocupada:
 
 ```json
@@ -348,12 +513,26 @@ Cuando la posicion del tablero esta ocupada:
 }
 ```
 
-error cuando se guarda el tablero:
+Error 7:
+
+Error cuando se guarda el tablero:
 
 ```json
 {
   "status": 400,
   "message": "Error saving board",
+  "content": {}
+}
+```
+
+Error 8:
+
+No existe el usuario
+
+```json
+{
+  "status": 404,
+  "message": "User with token doesn't exists",
   "content": {}
 }
 ```
