@@ -1,11 +1,6 @@
 class BoardsController < ApplicationController
-  before_action :set_board, only: %i[show join move]
-  before_action :check_token, only: %i[create join find_user_boards find_user_open_boards move]
-
-  def index
-    boards = Board.all
-    render_success_response(boards.preload(:player_1, :player_2).map { |board| board.json })
-  end
+  before_action :set_board, only: [:show, :join, :move]
+  before_action :check_token, except: [:show, :find_open_boards]
 
   def show
     render_success_response(@board.json)

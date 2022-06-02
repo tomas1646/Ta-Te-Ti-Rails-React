@@ -21,12 +21,12 @@ export function useSessionUser() {
 
 export function updateSessionUser(user: User) {
   currentUser = user;
-  axios.defaults.headers.common.Authorization = user.token
+  axios.defaults.headers.common.Authorization = user.token;
   userSubject.next(currentUser);
 }
 
 export function cleanupSessionUser() {
   currentUser = undefined;
-  axios.defaults.headers.common.Authorization = ""
+  axios.defaults.headers.common.Authorization = "";
   userSubject.next(currentUser);
 }

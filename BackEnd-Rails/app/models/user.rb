@@ -4,6 +4,10 @@ class User < ApplicationRecord
 
   before_create :set_token
 
+  def json
+    { name:, user_name:, token: }
+  end
+
   private
 
   def set_token

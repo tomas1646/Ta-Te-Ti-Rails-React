@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
 
-  resources :users, only: [:index, :show] do
+  resources :users, only: [] do
     collection do
       post :register
       post :login
     end
   end
 
-  resources :boards, only: [:index, :create, :show] do
+  resources :boards, only: [:create, :show] do
     member do 
       post :join
       post :move
