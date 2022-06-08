@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   
-  def register
+  def create
     user = User.new(user_params)
     if user.save
       render_success_response(user, 'User Created')

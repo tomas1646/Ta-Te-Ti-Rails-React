@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
 
-  resources :users, only: [] do
+  resources :users, only: [:create] do
     collection do
-      post :register
       post :login
     end
   end
