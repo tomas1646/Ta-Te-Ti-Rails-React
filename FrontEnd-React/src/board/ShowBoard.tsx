@@ -9,6 +9,7 @@ import useInterval from "../components/useInterval";
 import { useSessionUser } from "../store/userStore";
 import { Board, getBoard, moveBoard } from "./boardService";
 import Square from "./Square";
+import { BoardStatus } from "./boardTypes";
 
 export default function ShowBoard() {
   const params = useParams();
@@ -58,9 +59,9 @@ export default function ShowBoard() {
         setBoard(board);
 
         if (
-          board.status === "Player_1_Win" ||
-          board.status === "Player_2_Win" ||
-          board.status === "Draw"
+          board.status === BoardStatus.player_1_win ||
+          board.status === BoardStatus.player_2_win ||
+          board.status === BoardStatus.draw
         ) {
           setCanMove(false);
           setGameFinished(true);
@@ -69,14 +70,14 @@ export default function ShowBoard() {
 
         if (
           board.player_1_name === user?.name &&
-          board?.status === "Player_1_Turn"
+          board?.status === BoardStatus.player_1_turn
         ) {
           canmove = true;
           isPlayer1 = true;
         }
         if (
           board.player_2_name === user?.name &&
-          board?.status === "Player_2_Turn"
+          board?.status === BoardStatus.player_2_turn
         ) {
           canmove = true;
         }
