@@ -26,7 +26,7 @@ class BoardsController < ApplicationController
       return render_success_response(@board.json, 'Joined to the board')
     end
 
-    if @board.player_1.present? && @board.player_2.present?
+    if @board.is_board_full?
       return render_error_response({}, 'Board is full') 
     end
 

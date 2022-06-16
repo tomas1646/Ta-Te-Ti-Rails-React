@@ -17,6 +17,10 @@ class Board < ApplicationRecord
     player_1_win? || player_2_win? || draw?
   end
 
+  def is_board_full?
+    self.player_1.present? && self.player_2.present?
+  end
+
   def is_player_in_board? user
     player_1 == user || player_2 == user
   end
