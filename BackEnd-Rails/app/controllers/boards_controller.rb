@@ -1,6 +1,6 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: [:show, :join, :move]
-  before_action :check_token, except: [:show, :find_open_boards]
+  before_action :check_token, except: [:show]
 
   def index
     boards = Board.ransack(status_in: params[:status], player_1_id_or_player_2_id_eq: params.keys.include?("user") ? @user.id : nil).result
