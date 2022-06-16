@@ -4,10 +4,10 @@
 
 ### User
 
-| Metodo | Ruta            | Accion                                   |
-| ------ | --------------- | ---------------------------------------- |
-| POST   | /users/register | [Registrar Usuario](#post-usersregister) |
-| POST   | /users/login    | [Login](#post-userslogin)                |
+| Metodo | Ruta         | Accion                           |
+| ------ | ------------ | -------------------------------- |
+| POST   | /users       | [Registrar Usuario](#post-users) |
+| POST   | /users/login | [Login](#post-userslogin)        |
 
 ### Board
 
@@ -27,7 +27,7 @@
 
 ---
 
-#### POST /users/register
+#### POST /users
 
 Registrar Usuario
 
