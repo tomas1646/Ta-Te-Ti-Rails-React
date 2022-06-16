@@ -18,7 +18,7 @@ class Board < ApplicationRecord
   end
 
   def is_board_full?
-    self.player_1.present? && self.player_2.present?
+    player_1.present? && player_2.present?
   end
 
   def is_player_in_board? user
