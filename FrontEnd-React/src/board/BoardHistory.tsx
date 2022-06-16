@@ -13,7 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { showErrorMessage, showSuccessMessage } from "../components/SnackBar";
 import { Title } from "../components/Title";
 import { useSessionUser } from "../store/userStore";
-import { Board, getUserBoards, joinGame } from "./boardService";
+import { Board, getBoards, joinGame } from "./boardService";
+import { BoardStatus } from "./boardTypes";
 
 export default function BoardHistory() {
   const navigate = useNavigate();
@@ -26,14 +27,13 @@ export default function BoardHistory() {
       return navigate("/login");
     }
 
-    getUserBoards()
+    getBoards(true)
       .then((response) => {
         setBoards(response.content);
       })
       .catch((err) =>
         showErrorMessage(err.response.data.message || "Unexcpected Error")
       );
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -50,18 +50,18 @@ export default function BoardHistory() {
 
   const getStatus = (status: string, player_1_name: string): string => {
     if (
-      status === "Waiting_Players" ||
-      status === "Player_1_Turn" ||
-      status === "Player_2_Turn"
+      status === BoardStatus.waiting_players.name ||
+      status === BoardStatus.player_1_turn.name ||
+      status === BoardStatus.player_2_turn.name
     ) {
       return "In Course";
     }
 
-    if (status === "Player_1_Win") {
+    if (status === BoardStatus.player_1_win.name) {
       return player_1_name === user?.name ? "Won" : "Lost";
     }
 
-    if (status === "Player_2_Win") {
+    if (status === BoardStatus.player_2_win.name) {
       return player_1_name === user?.name ? "Lost" : "Win";
     }
 

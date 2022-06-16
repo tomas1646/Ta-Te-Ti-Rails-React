@@ -59,10 +59,13 @@ export default function ShowBoard() {
         setBoard(board);
 
         if (
-          board.status === BoardStatus.player_1_win ||
-          board.status === BoardStatus.player_2_win ||
-          board.status === BoardStatus.draw
+          board.status === BoardStatus.player_1_win.name ||
+          board.status === BoardStatus.player_2_win.name ||
+          board.status === BoardStatus.draw.name
         ) {
+          console.log("draw");
+          console.log(BoardStatus.draw);
+          console.log();
           setCanMove(false);
           setGameFinished(true);
           return showSuccessMessage("Game Finished");
@@ -70,14 +73,14 @@ export default function ShowBoard() {
 
         if (
           board.player_1_name === user?.name &&
-          board?.status === BoardStatus.player_1_turn
+          board?.status === BoardStatus.player_1_turn.name
         ) {
           canmove = true;
           isPlayer1 = true;
         }
         if (
           board.player_2_name === user?.name &&
-          board?.status === BoardStatus.player_2_turn
+          board?.status === BoardStatus.player_2_turn.name
         ) {
           canmove = true;
         }

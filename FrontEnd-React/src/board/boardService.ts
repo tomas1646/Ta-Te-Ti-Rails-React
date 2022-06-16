@@ -28,25 +28,19 @@ export async function joinGame(
   return response;
 }
 
-export async function getOpenBoards(): Promise<ApiResponse<Board[]>> {
+export async function getBoards(
+  searchUser?: boolean,
+  status?: number[]
+): Promise<ApiResponse<Board[]>> {
+  let queryParams = "?";
+
+  if (searchUser) {
+    queryParams += "user&";
+  }
+  status && status.forEach((state) => (queryParams += `status[]=${state}&`));
+
   const response: ApiResponse<Board[]> = (
-    await axios.get(boardUrl + "/find_open_boards")
-  ).data;
-
-  return response;
-}
-
-export async function getUserBoards(): Promise<ApiResponse<Board[]>> {
-  const response: ApiResponse<Board[]> = (
-    await axios.get(boardUrl + "/find_user_boards")
-  ).data;
-
-  return response;
-}
-
-export async function getUserOpenBoards(): Promise<ApiResponse<Board[]>> {
-  const response: ApiResponse<Board[]> = (
-    await axios.get(boardUrl + "/find_user_open_boards")
+    await axios.get(boardUrl + queryParams)
   ).data;
 
   return response;

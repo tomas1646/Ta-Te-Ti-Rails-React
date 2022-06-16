@@ -6,13 +6,8 @@ import { showErrorMessage, showSuccessMessage } from "../components/SnackBar";
 import FormTextField from "../components/TextField";
 import { Title, Text } from "../components/Title";
 import { useSessionUser } from "../store/userStore";
-import {
-  createGame,
-  joinGame,
-  Board,
-  getOpenBoards,
-  getUserOpenBoards,
-} from "./boardService";
+import { createGame, joinGame, Board, getBoards } from "./boardService";
+import { BoardStatus } from "./boardTypes";
 
 export default function BoardHome() {
   const navigate = useNavigate();
@@ -33,16 +28,20 @@ export default function BoardHome() {
   }, []);
 
   function fetchData() {
-    getOpenBoards()
+    getBoards(false, [BoardStatus.waiting_players.number])
       .then((response) => setOpenBoards(response.content))
       .catch((err) =>
         showErrorMessage(err.response.data.message || "Unexcpected Error")
       );
 
-    getUserOpenBoards()
+    getBoards(true, [
+      BoardStatus.waiting_players.number,
+      BoardStatus.player_1_turn.number,
+      BoardStatus.player_1_turn.number,
+    ])
       .then((response) => setUserOpenBoards(response.content))
       .catch((err) =>
-        showErrorMessage(err.response.data.message || "Unexpected Error")
+        showErrorMessage(err.response.data.message || "Unexcpected Error")
       );
   }
 
