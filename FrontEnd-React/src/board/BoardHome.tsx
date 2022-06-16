@@ -37,7 +37,7 @@ export default function BoardHome() {
     getBoards(true, [
       BoardStatus.waiting_players.number,
       BoardStatus.player_1_turn.number,
-      BoardStatus.player_1_turn.number,
+      BoardStatus.player_2_turn.number,
     ])
       .then((response) => setUserOpenBoards(response.content))
       .catch((err) =>

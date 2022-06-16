@@ -11,15 +11,13 @@
 
 ### Board
 
-| Metodo | Ruta                          | Accion                                                                                                     |
-| ------ | ----------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| GET    | /boards/:id                   | [Obtener un tablero](#get-boardsid)                                                                        |
-| GET    | /boards/find_open_boards      | [Obtener los tableros a los que se pueden unir los jugadores](#get-boardsfindopenboards)                   |
-| GET    | /boards/find_user_boards      | [Obtener todos los tableros en los que participo el usuario](#get-boardsfinduserboards)                    |
-| GET    | /boards/find_user_open_boards | [Obtener todos los tableros en los que esta el usuario, y no han terminado](#get-boardsfinduseropenboards) |
-| POST   | /boards                       | [Crear un tablero](#post-boards)                                                                           |
-| POST   | /boards/:id/join              | [Unirse a un tablero](#post-boardsidjoin)                                                                  |
-| POST   | /boards/:id/move              | [Hacer un movimiento en un tablero](#post-boardsidmove)                                                    |
+| Metodo | Ruta             | Accion                                                  |
+| ------ | ---------------- | ------------------------------------------------------- |
+| GET    | /boards          | [Obtener los tableros](#get-boards)                     |
+| GET    | /boards/:id      | [Obtener un tablero](#get-boardsid)                     |
+| POST   | /boards          | [Crear un tablero](#post-boards)                        |
+| POST   | /boards/:id/join | [Unirse a un tablero](#post-boardsidjoin)               |
+| POST   | /boards/:id/move | [Hacer un movimiento en un tablero](#post-boardsidmove) |
 
 ---
 
@@ -114,6 +112,53 @@ Error:
 
 ---
 
+#### GET /boards
+
+Obtener todos los tableros. Se puede filtrar por estado y por jugador
+
+```text
+Para obtener todos los tableros: ".../boards"
+
+Para obtener todos los con un estado en especifico: ".../boards?status[]=0"
+
+Para obtener todos los tableros de un usuario: ".../boards?user"
+```
+
+Ejemplo si queremos obtener todos los tableros en los que esta el usuario logueado, y que tengan estado "waiting_players" o "player_1_turn" o "player_2_turn"
+
+```text
+url: .../boards?user&status[]=0&status[]=1&status[]=2
+```
+
+RESPONSE
+
+Success:
+
+```json
+{
+  "status": 200,
+  "message": "Action completed successfully",
+  "content": [
+    {
+      "player_1_name": "Tomas E",
+      "player_2_name": "Jane Doe",
+      "status": "Waiting_For_Players",
+      "token": "b5283e68-d468-410c-8a1c-b52f8cbda245",
+      "board": ["X", 0, "O", "X", 0, "O", "X", 0, 0]
+    },
+    {
+      "player_1_name": "Tomas E",
+      "player_2_name": "Jane Doe",
+      "status": "Waiting_For_Players",
+      "token": "b5283e68-d468-410c-8a1c-b52f8cbda245",
+      "board": ["X", 0, "O", "X", 0, "O", "X", 0, 0]
+    }
+  ]
+}
+```
+
+---
+
 #### GET /boards/:id
 
 Obtener un tablero
@@ -143,39 +188,6 @@ Error:
   "status": 404,
   "message": "Board doesn't exists",
   "content": {}
-}
-```
-
----
-
-#### GET /boards/find_open_boards
-
-Obtener los tableros a los que se pueden unir los jugadores
-
-RESPONSE
-
-Success:
-
-```json
-{
-  "status": 200,
-  "message": "Action completed successfully",
-  "content": [
-    {
-      "player_1_name": "Tomas E",
-      "player_2_name": "Jane Doe",
-      "status": "Waiting_For_Players",
-      "token": "b5283e68-d468-410c-8a1c-b52f8cbda245",
-      "board": ["X", 0, "O", "X", 0, "O", "X", 0, 0]
-    },
-    {
-      "player_1_name": "Tomas E",
-      "player_2_name": "Jane Doe",
-      "status": "Waiting_For_Players",
-      "token": "b5283e68-d468-410c-8a1c-b52f8cbda245",
-      "board": ["X", 0, "O", "X", 0, "O", "X", 0, 0]
-    }
-  ]
 }
 ```
 
